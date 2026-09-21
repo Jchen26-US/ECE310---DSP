@@ -7,11 +7,11 @@ import librosa #for converting mp3 files into readable input
 import soundfile as sf #for writing mp3 files as output
 
 def examine_effect_of_M():
-    M = [10]#,100,1000,10000]
-    w_c = np.pi/2#max(L,D) 
+    M = [10,100,1000,10000]
+    w_c = np.pi/2 #max(L,D) 
     for val in M:
         n = np.arange(-val, val+1)
-        h = (1/np.pi * n) * np.sin(w_c*n)
+        h = (w_c/np.pi)*np.sinc(w_c * n/ np.pi) 
         utilities.plot_dtft(h,val)
 
 #notes on different values of M
@@ -67,13 +67,16 @@ def equalizer(x, fLow, fMid, fHigh, GLow, GMid, GHigh, fs, M = 500):
 
 
 if __name__ == '__main__':
+    examine_effect_of_M()
     input_file="Funk.mp3"
     x, fsIn = librosa.load(input_file, sr = None) #loads input_file and does not resample(sr=None), loads sampling rate into fsIn
-    GLow = 1.5
-    GMid = 1.0
-    GHigh = 0.8
+    GLow = 1.0
+    GMid = 10.0
+    GHigh = 1.0
     fsOut = 44100#
+    print("Converting Rate")
     xNewRate = rate_convert(x, 147, 160)
+    print("Equalizing")
     yOut = equalizer(
         xNewRate,
         300, 2000, 20000,
