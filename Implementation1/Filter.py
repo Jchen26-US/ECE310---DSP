@@ -34,7 +34,7 @@ def Reusable_Filter(w_c, M):
     h = (w_c/np.pi)*np.sinc(w_c * n/ np.pi) 
     return h
 
-def rate_convert(x,L,D,M=500):
+def rate_convert(x,L,D,M=500): #converts mono audio only
     #Upsampling by L
     xUp = np.zeros(len(x) * L) #array length x times L
     xUp[::L] = x #every Lth element = element of x
@@ -68,10 +68,11 @@ def equalizer(x, fLow, fMid, fHigh, GLow, GMid, GHigh, fs, M = 500):
 
 if __name__ == '__main__':
     examine_effect_of_M()
-    input_file="Funk.mp3"
-    x, fsIn = librosa.load(input_file, sr = None) #loads input_file and does not resample(sr=None), loads sampling rate into fsIn
-    GLow = 1.0
-    GMid = 10.0
+    input_file="funk.mp3"
+    #x, fsIn = librosa.load(input_file, sr = None) #loads input_file and does not resample(sr=None),loads sampling rate into fsIn
+    x,fsIn = librosa.load(input_file, sr = None, offset = 0, duration = 15); #for low power systems
+    GLow = 10.0
+    GMid = 1.0
     GHigh = 1.0
     fsOut = 44100#
     print("Converting Rate")
